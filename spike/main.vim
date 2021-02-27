@@ -1,5 +1,3 @@
+exec "source src/file_management.vim"
 
-exec "source lib.vim"
-
-call ReplaceStuff();
-call "penis"
+call InitState("temp")

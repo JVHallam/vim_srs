@@ -1,21 +1,20 @@
 
 function setup([string]$template, [string]$outputPath){
     echo "running setup"
-    cp $template $outputPath
 }
 
 function main([string]$file){
-    echo "before";
-    cat $file
+    vim output.txt -c "source main.vim" -c "wq";
+}
 
-    vim $file -c "source main.vim" -c "wq";
-    echo "after"
-    cat $file
+function checkState(){
+    $result = test-path "temp"
+    echo "does temp exist? : $($result)"
 }
 
 function teardown([string]$file){
     echo "running teardown"
-    rm $file
+    Remove-Item -force "temp"
 }
 
 # Create the template
@@ -23,5 +22,6 @@ $templatePath = "template.txt";
 $outputPath = "output.txt";
 
 setup -template $templatePath -output $outputPath;
-main -file $outputPath;
-teardown -file $outputPath;
+main
+checkState;
+# teardown -file $outputPath;
