@@ -1,27 +1,36 @@
 
-function setup([string]$template, [string]$outputPath){
+function setup([string]$outputPath){
     echo "running setup"
+
+    if(test-path $outputPath){
+        rm $outputPath;
+    }
 }
 
-function main([string]$file){
-    vim output.txt -c "source main.vim" -c "wq";
+function main([string]$outputFile){
+    vim file.txt `
+            -c "let outputFile='$($outputFile)'" `
+            -c "source main.vim" `
+            -c "q!" | out-null;
 }
 
-function checkState(){
-    $result = test-path "temp"
-    echo "does temp exist? : $($result)"
-}
+function teardown([string]$outputFile){
+    echo "running teardown";
 
-function teardown([string]$file){
-    echo "running teardown"
-    Remove-Item -force "temp"
+    $fileExists = test-path $outputFile
+    if($fileExists){
+        cat $outputFile
+        Remove-Item -force $outputFile
+    }
+    else{
+        echo "output file doesn't exist"
+    }
+
 }
 
 # Create the template
-$templatePath = "template.txt";
-$outputPath = "output.txt";
+$exOutputPath = "ex_output.txt"
 
-setup -template $templatePath -output $outputPath;
-main
-checkState;
-# teardown -file $outputPath;
+setup -outputPath $exOutputPath;
+main -outputFile $exOutputPath;
+teardown -outputFile $exOutputPath;

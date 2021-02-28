@@ -4,6 +4,4 @@ function InitState(dir="temp", file="state")
         let command = "mkdir " . a:dir
         call system(command)
     endif
-
-    system("echo \"\" > " . a:file)
 endfunction
