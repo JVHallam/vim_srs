@@ -4,7 +4,7 @@ function PrintErrors()
         echo " ------------------------- "
         echo ""
 
-        let lines = split(error, "\\.")
+        let lines = split(error, "\\.\\.")
 
         let messages = filter(lines, {ind, val -> val != "" })
 

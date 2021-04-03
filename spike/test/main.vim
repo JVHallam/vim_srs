@@ -19,7 +19,7 @@ exec "source test/directory.test.vim"
 
 " ================
 
-echo "Tests complete : "
+echo "Tests complete, Errors: "
 call PrintErrors()
 
 " stop the redirection

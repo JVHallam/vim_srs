@@ -10,7 +10,7 @@ function setup([string]$outputPath){
 function main([string]$outputFile){
     vim file.txt `
             -c "let outputFile='$($outputFile)'" `
-            -c "source main.vim" `
+            -c "source src/main.vim" `
             -c "q!" | out-null;
 }
 

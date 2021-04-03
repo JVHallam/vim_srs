@@ -1,5 +1,5 @@
 " Setup the local temp directory, to hold sessions
-function InitState(dir="temp", file="state")
+function InitState(dir="temp", file="vimrun.state")
     call InitStateDir(a:dir)
     call InitStateFile(a:dir, a:file)
 endfunction
@@ -14,7 +14,17 @@ endfunction
 function InitStateFile(dir="temp", file="state")
     let path = a:dir . "/" . a:file
 
+    let exerciseList = GetExerciseList()
+
     if( filereadable(path) == v:false )
-        call writefile([], path)
+        call writefile(exerciseList, path)
     endif
+endfunction
+
+function GetExerciseList()
+    let exerciseDirPath = "./exercises"
+
+    let exerciseList = readdir( exerciseDirPath )
+
+    return exerciseList
 endfunction
