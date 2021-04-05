@@ -60,7 +60,52 @@ function DoesUseTemplateInit()
     call TearDownState()
 endfunction
 
-function RetrieveExercises_FiveProvided_ThreeSelected()
+" ======================= TESTS TO TEST ============================
+
+function RunRetrieveExercisesTest( templatePath, expectedPath, exerciseCount )
+
+    call InitState("temp", "vimrun.state", a:templatePath)
+
+    let actualExercises = RetrieveExercises( s:stateFilePath, a:exerciseCount )
+
+    let expectedExercises = readfile( a:expectedPath )
+
+    call assert_equal( expectedExercises, actualExercises )
+
+    call TearDownState()
+
+endfunction
+
+function RetrieveExercises_OneProvidedOneSelected_OneReturned()
+    let exerciseCount = 1
+    let templatePath = "./test/resources/retrieve_exercises/RetrieveExercises_1_template.txt"
+    let expectedPath = "./test/resources/retrieve_exercises/RetrieveExercises_1_expected.txt"
+
+    call RunRetrieveExercisesTest( templatePath, expectedPath, exerciseCount )
+endfunction
+
+function RetrieveExercises_TwoProvidedOneSelected_OneReturned()
+    let exerciseCount = 1
+    let templatePath = "./test/resources/retrieve_exercises/RetrieveExercises_2_template.txt"
+    let expectedPath = "./test/resources/retrieve_exercises/RetrieveExercises_2_expected.txt"
+
+    call RunRetrieveExercisesTest( templatePath, expectedPath, exerciseCount )
+endfunction
+
+function RetrieveExercises_FourProvidedTwoSelected_TwoReturned()
+    let exerciseCount = 2
+    let templatePath = "./test/resources/retrieve_exercises/RetrieveExercises_3_template.txt"
+    let expectedPath = "./test/resources/retrieve_exercises/RetrieveExercises_3_expected.txt"
+
+    call RunRetrieveExercisesTest( templatePath, expectedPath, exerciseCount )
+endfunction
+
+function RetrieveExercises_FiveProvidedThreeSelected_ThreeReturned()
+    let exerciseCount = 3
+    let templatePath = "./test/resources/retrieve_exercises/RetrieveExercises_4_template.txt"
+    let expectedPath = "./test/resources/retrieve_exercises/RetrieveExercises_4_expected.txt"
+
+    call RunRetrieveExercisesTest( templatePath, expectedPath, exerciseCount )
 endfunction
 
 " ==================== Test Execution =================================
@@ -70,4 +115,9 @@ endfunction
 " call DoesRotatedMatchExpected()
 " call DoesStateMatchExpected()
 " call DoesRetrieveExercise()
-call DoesUseTemplateInit()
+" call DoesUseTemplateInit()
+
+" call RetrieveExercises_OneProvidedOneSelected_OneReturned()
+" call RetrieveExercises_TwoProvidedOneSelected_OneReturned()
+" call RetrieveExercises_FourProvidedTwoSelected_TwoReturned()
+" call RetrieveExercises_FiveProvidedThreeSelected_ThreeReturned()
