@@ -50,10 +50,24 @@ function DoesRetrieveExercise()
     call TearDownState()
 endfunction
 
+function DoesUseTemplateInit()
+    let templatePath = "./test/resources/DoesUseTemplateInit.txt"
+
+    call InitState("temp", "vimrun.state", templatePath)
+
+    call AssertFilesEqual( "./temp/vimrun.state", templatePath )
+
+    call TearDownState()
+endfunction
+
+function RetrieveExercises_FiveProvided_ThreeSelected()
+endfunction
+
 " ==================== Test Execution =================================
 
-call DoesTearDown()
-call DoesStateExist()
-call DoesRotatedMatchExpected()
-call DoesStateMatchExpected()
-call DoesRetrieveExercise()
+" call DoesTearDown()
+" call DoesStateExist()
+" call DoesRotatedMatchExpected()
+" call DoesStateMatchExpected()
+" call DoesRetrieveExercise()
+call DoesUseTemplateInit()

@@ -1,7 +1,7 @@
 " Setup the local temp directory, to hold sessions
-function InitState(dir="temp", file="vimrun.state")
+function InitState(dir="temp", file="vimrun.state", stateTemplatePath="")
     call InitStateDir(a:dir)
-    call InitStateFile(a:dir, a:file)
+    call InitStateFile(a:dir, a:file, a:stateTemplatePath)
 endfunction
 
 function RotateFile( stateFilePath )
@@ -30,6 +30,38 @@ endfunction
 
 " ======================== Stuff that shouldn't be public ====================
 
+" Should probably be in it's own file
+" Wanted exercise count => The amount of exercises that are going to be ran in the next session
+" total exercise count => the total number of exercises available 
+function CreateExerciseIndexArray( wantedExerciseCount, totalExerciseCount )
+    let multiplier = a:totalExerciseCount / pow(2, a:wantedExerciseCount )
+
+    " Create the initial array, increasing by the powers of 2
+    let i = 0
+    let array=[]
+    while i < a:wantedExerciseCount
+        " pow(2, i) can never go below 1. Therefore, offset it by -1
+        let rawValue = ceil(pow(2, i) * multiplier) - 1
+        let value = float2nr( rawValue )
+        call add( array, value )
+        let i = i + 1
+    endwhile
+
+    " All values in the sequence should be greater than the previous value
+    " If there are any values that are equal to or below the previous value
+    " Set it to be one above that value
+    let i = 1
+    while i < len( array )
+        if( array[i - 1] >= array[i] )
+            let array[i] = array[i - 1] + 1
+        endif
+
+        let i = i + 1
+    endwhile
+
+    return array
+endfunction
+
 function InitStateDir(dir="temp")
     if( isdirectory( a:dir ) == v:false )
         let command = "mkdir " . a:dir
@@ -37,13 +69,22 @@ function InitStateDir(dir="temp")
     endif
 endfunction
 
-function InitStateFile(dir="temp", file="state")
+function InitStateFile( dir, file, stateTemplatePath )
     let path = a:dir . "/" . a:file
 
-    if( filereadable(path) == v:false )
-        let exerciseList = GetExerciseList()
-        call writefile(exerciseList, path)
+    if( filereadable(path) == v:true )
+        return
     endif
+
+    let exerciseList = []
+
+    if( a:stateTemplatePath != "" )
+        let exerciseList = readfile( a:stateTemplatePath )
+    else
+        let exerciseList = GetExerciseList()
+    endif
+
+    call writefile(exerciseList, path)
 endfunction
 
 function GetExerciseList()
