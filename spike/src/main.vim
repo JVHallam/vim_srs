@@ -15,7 +15,9 @@ exec "redir >> " . g:outputFile
 echo "Running... vimscript main"
 echo "outputting to : " . g:outputFile
 
-call InitState("temp")
+call InitState()
+call RotateFile( "temp/vimrun.state" )
+call TearDownState()
 
 " stop the redirection
 exec "redir END"

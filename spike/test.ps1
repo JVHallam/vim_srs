@@ -11,7 +11,7 @@ function main([string]$outputFile){
     vim file.txt `
             -c "let outputFile='$($outputFile)'" `
             -c "source test/main.vim" `
-            -c "q!" | out-null;
+            -c "q!";
 }
 
 function teardown([string]$outputFile){

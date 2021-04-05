@@ -28,3 +28,33 @@ function GetExerciseList()
 
     return exerciseList
 endfunction
+
+function RotateFile( stateFilePath )
+    let state = readfile( a:stateFilePath )
+
+    let rotatedState = RotateArray( state )
+    
+    call writefile( rotatedState, a:stateFilePath )
+endfunction
+
+function RotateArray( array )
+    let arrayCopy = copy( a:array )
+
+    let arrayLength = len( arrayCopy )
+
+    let finalIndex = arrayLength - 1
+
+    let newHead = [ arrayCopy[finalIndex] ]
+
+    let newTail = arrayCopy[0 : finalIndex - 1]
+
+    let arrayCopy = newHead + newTail
+
+    return arrayCopy
+endfunction
+
+function TearDownState( stateDirectory = "./temp" )
+    " Delete the directory
+    let flags = "rf"
+    call delete( a:stateDirectory, flags )
+endfunction
