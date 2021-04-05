@@ -38,9 +38,22 @@ function DoesTearDown()
     call AssertFileDoesNotExist( s:stateFilePath, "State file was found" )
 endfunction
 
+function DoesRetrieveExercise()
+    call InitState()
+
+    let expectedExercises = [ "test_1" ]
+
+    let retrievedExercises = RetrieveExercises( s:stateFilePath, 1 )
+
+    call assert_equal( expectedExercises, retrievedExercises )
+
+    call TearDownState()
+endfunction
+
 " ==================== Test Execution =================================
 
 call DoesTearDown()
 call DoesStateExist()
 call DoesRotatedMatchExpected()
 call DoesStateMatchExpected()
+call DoesRetrieveExercise()
